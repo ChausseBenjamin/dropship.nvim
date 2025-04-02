@@ -6,24 +6,24 @@ local conf = require("telescope.config").values
 local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
 
-M.drop_sites = {}
+M.drop_locations = {}
 M.use_exp = false
 
 M.setup = function(opts)
   opts = opts or {}
-  if type(opts.drop_sites) == "table" then
-    M.drop_sites = opts.drop_sites
-  elseif type(opts.drop_sites) == "string" then
+  if type(opts.drop_locations) == "table" then
+    M.drop_locations = opts.drop_locations
+  elseif type(opts.drop_locations) == "string" then
     local success, loaded_sites = pcall(function()
-      return dofile(vim.fn.expand(opts.drop_sites))
+      return dofile(vim.fn.expand(opts.drop_locations))
     end)
     if success and type(loaded_sites) == "table" then
-      M.drop_sites = loaded_sites
+      M.drop_locations = loaded_sites
     else
-      vim.notify("Failed to load drop_sites from file: " .. opts.drop_sites, vim.log.levels.ERROR)
+      vim.notify("Failed to load drop_locations from file: " .. opts.drop_locations, vim.log.levels.ERROR)
     end
   else
-    vim.notify("Invalid drop_sites configuration", vim.log.levels.ERROR)
+    vim.notify("Invalid drop_locations configuration", vim.log.levels.ERROR)
   end
   M.use_exp = opts.new_tab_explorer or false
 end
@@ -33,7 +33,7 @@ local function get_target(opts, callback)
   pickers
     .new(opts, {
       finder = finders.new_table({
-        results = M.drop_sites,
+        results = M.drop_locations,
         entry_maker = function(entry)
           return {
             value = entry,
