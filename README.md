@@ -23,33 +23,33 @@ Your neovim tabs, dropshipped into your projects
   "ChausseBenjamin/dropship.nvim",
   dependencies = "nvim-telescope/telescope.nvim",
   opts = {
-    drop_locations = {
-        { "Projects", "~/Workspace" },
-        { "Neovim Config", "~/.config/nvim" },
-        { "University", "~/Documents/school/university/current_semester" },
-    },
+  drop_locations = {
+    { "Projects", "~/Workspace" },
+    { "Neovim Config", "~/.config/nvim" },
+    { "University", "~/Documents/school/university/current_semester" },
+  },
   },
   keys = {
-		{
-			"<leader>dt",
-			function()
-				require("dropship").dropship_newtab()
-			end,
-			mode = "n",
-			desc = "[D]ropship in a new [T]ab",
-		},
-		{
-			"<leader>dh",
-			function()
-				require("dropship").dropship_current()
-			end,
-			mode = "n",
-			desc = "[D]ropship right [H]ere",
-		},
+    {
+      "<leader>dt",
+      function()
+        require("dropship").dropship_newtab()
+      end,
+      mode = "n",
+      desc = "[D]ropship in a new [T]ab",
+    },
+    {
+      "<leader>dh",
+      function()
+        require("dropship").dropship_current()
+      end,
+      mode = "n",
+      desc = "[D]ropship right [H]ere",
+    },
   },
   cmd = {
-    "Dropship",
-    "DropshipNewTab",
+  "Dropship",
+  "DropshipNewTab",
   }
 }
 ```
@@ -66,7 +66,7 @@ solution makes sense for me to keep all my shortcuts in sync.
   "ChausseBenjamin/dropship.nvim",
   dependencies = "nvim-telescope/telescope.nvim",
   opts = {
-    drop_locations = "~/.cache/droplist.lua"
+  drop_locations = "~/.cache/droplist.lua"
   },
   -- Same as above for the rest...
 }
