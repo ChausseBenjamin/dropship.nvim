@@ -16,6 +16,9 @@ Your neovim tabs, dropshipped into your projects
 2. Setup keybinds you might want to use dropship with
 3. Profit!
 
+Below you may find some example [Lazy][2] configurations for this
+plugin.
+
 **Using a pre-baked list of drop-locations**:
 
 ```lua
@@ -23,11 +26,11 @@ Your neovim tabs, dropshipped into your projects
   "ChausseBenjamin/dropship.nvim",
   dependencies = "nvim-telescope/telescope.nvim",
   opts = {
-  drop_locations = {
-    { "Projects", "~/Workspace" },
-    { "Neovim Config", "~/.config/nvim" },
-    { "University", "~/Documents/school/university/current_semester" },
-  },
+    drop_locations = {
+      { "Projects", "~/Workspace" },
+      { "Neovim Config", "~/.config/nvim" },
+      { "University", "~/Documents/school/university/current_semester" },
+    },
   },
   keys = {
     {
@@ -84,3 +87,4 @@ return {
 
 
 [1]: https://github.com/ChausseBenjamin/dotfiles/blob/master/.local/bin/shortcutgen
+[2]: https://github.com/folke/lazy.nvim
