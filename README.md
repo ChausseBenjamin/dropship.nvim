@@ -9,7 +9,7 @@ Your neovim tabs, dropshipped into your projects
 </div>
 
 
-# How it works
+## How it works
 
 1. Configure the plugin with either a table containing drop location
    or a path to a lua file that returns that.
@@ -26,6 +26,7 @@ plugin.
   "ChausseBenjamin/dropship.nvim",
   dependencies = "nvim-telescope/telescope.nvim",
   opts = {
+    new_tab_explorer = false, -- Set to true to use `:Exp` on new tabs
     drop_locations = {
       { "Projects", "~/Workspace" },
       { "Neovim Config", "~/.config/nvim" },
@@ -59,8 +60,9 @@ plugin.
     },
   },
   cmd = {
-  "Dropship",
-  "DropshipNewTab",
+    "DropshipCurrentTab",
+    "DropshipNewTab",
+    "DropshipGlobalDir",
   }
 }
 ```
@@ -92,6 +94,13 @@ return {
   { "University", "~/Documents/school/university/current_semester" },
 }
 ```
+
+## Why did I make this
+
+I've never written a neovim before. So I figured this would be a great learning experience.
+Also, like mentionned above, I use a shortcuts generator script on my machines. Thus, being
+able to import a lua file containing my shortcuts from outside my neovim directory is really
+useful to me.
 
 
 [1]: https://github.com/ChausseBenjamin/dotfiles/blob/master/.local/bin/shortcutgen
