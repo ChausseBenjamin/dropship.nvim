@@ -28,9 +28,9 @@ plugin.
   opts = {
     new_tab_explorer = false, -- Set to true to use `:Exp` on new tabs
     drop_locations = {
-      { "Projects", "~/Workspace" },
-      { "Neovim Config", "~/.config/nvim" },
-      { "University", "~/Documents/school/university/current_semester" },
+        { name = "Projects",      dir = "~/Workspace" },
+        { name = "Neovim Config", dir = "~/.config/nvim" },
+        { name = "University",    dir = "~/Documents/school/university/current_semester" },
     },
   },
   keys = {
