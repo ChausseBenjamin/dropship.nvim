@@ -8,13 +8,21 @@ Your neovim tabs, dropshipped into your projects
 
 </div>
 
+## What it is
 
-## How it works
+It's yet another bookmarks telescope plugin. However, I designed it so that you
+can load your bookmarks from a lua file that isn't in your neovim config.
 
-1. Configure the plugin with either a table containing drop location
-   or a path to a lua file that returns that.
-2. Setup keybinds you might want to use dropship with
-3. Profit!
+You can either:
+
+- Load up a bookmark/drop-site for every open tab `:DropshipGlobalDir`
+- Load up a bookmark/drop-site for the current tab `:DropshipCurrentTab`
+- Load up a bookmark/drop-site in a new tab `:DropshipNewTab`
+
+The whole plugin is under 100 lines of code so don't worry about bloating your
+neovim config ;)
+
+## Configuration
 
 Below you may find some example [Lazy][2] configurations for this
 plugin.
