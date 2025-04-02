@@ -35,19 +35,27 @@ plugin.
   keys = {
     {
       "<leader>dt",
-      function()
-        require("dropship").dropship_newtab()
+      function() -- creates a new tab, then uses `:tcd`
+        require("dropship").new_tab()
       end,
       mode = "n",
       desc = "[D]ropship in a new [T]ab",
     },
     {
       "<leader>dh",
-      function()
-        require("dropship").dropship_current()
+      function() -- uses `:tcd` on current tab
+        require("dropship").current_tab()
       end,
       mode = "n",
       desc = "[D]ropship right [H]ere",
+    },
+    {
+      "<leader>dg",
+      function() -- uses `:cd`
+        require("dropship").globally()
+      end,
+      mode = "n",
+      desc = "[D]ropship [G]lobally",
     },
   },
   cmd = {

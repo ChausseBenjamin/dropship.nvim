@@ -1,79 +1,78 @@
 local M = {}
 
--- dropship.nvim reads a list of drop locations (aka Bookmarks) and drops you
--- into a new tab at that location.
--- I like having one tab per project when using vim (ex: If I were to quickly
--- edit my vim config while working on a Go project, I would open a separate
--- tab and `:tcd` into my neovim configuration to avoid leaving my project
--- directory.
-
---- @class drop_location
---- @field name string
---- @field loc string
-
---- @class options
---- @field drop_targets string|drop_location[]
-
---- @type options
-local defaults = {
-	drop_targets = {},
-}
-
---- @type options
-local config
-
--- Configure dropship.nvim
--- @param ops boolean|options: plugin options
-M.setup = function(opts)
-	-- config = opts or defaults
-	-- if type(config.drop_targets) == "string" then
-	-- 	local ok, result = pcall(dofile, config.drop_targets)
-	-- 	if ok and type(result) == "table" then
-	-- 		config.drop_targets = result
-	-- 	else
-	-- 		error("Invalid drop_targets file: must return a table of drop_location")
-	-- 	end
-	-- elseif type(config.drop_targets) ~= "table" then
-	-- 	error("drop_targets must be a string (file path) or a table of drop_location")
-	-- end
-end
-
 local pickers = require("telescope.pickers")
 local finders = require("telescope.finders")
 local conf = require("telescope.config").values
 local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
 
--- our picker function: colors
-M.dropdir = function(opts)
-	opts = opts or {}
-	pickers
-		.new(opts, {
-			actions.smart_send_to_qflist,
-			prompt_title = "Drop Locations:",
-			finder = finders.new_table({
-				results = {
-					{ "Home", "~/" },
-					{ "School", "~/Dropbox/A/scholar/sherbrooke" },
-					{ "Workspace", "~/Workspace" },
-					{ "Dropbox", "~/Dropbox" },
-				},
-				entry_maker = function(entry)
-					return {
-						value = entry,
-						display = entry[1],
-						ordinal = entry[1],
-					}
-				end,
-			}),
-			sorter = conf.generic_sorter(opts),
-		})
-		:find()
+local drop_sites = {}
+
+M.setup = function(opts)
+  opts = opts or {}
+  if type(opts.drop_sites) == "table" then
+    drop_sites = opts.drop_sites
+  elseif type(opts.drop_sites) == "string" then
+    local success, loaded_sites = pcall(function()
+      return dofile(vim.fn.expand(opts.drop_sites))
+    end)
+    if success and type(loaded_sites) == "table" then
+      drop_sites = loaded_sites
+    else
+      vim.notify("Failed to load drop_sites from file: " .. opts.drop_sites, vim.log.levels.ERROR)
+    end
+  else
+    vim.notify("Invalid drop_sites configuration", vim.log.levels.ERROR)
+  end
 end
 
---- Drop into a new tab at the selected location in telescope
-M.drop_to_tab = function() end
+local function get_target(opts, callback)
+  opts = opts or {}
+  pickers
+    .new(opts, {
+      finder = finders.new_table({
+        results = drop_sites,
+        entry_maker = function(entry)
+          return {
+            value = entry,
+            display = entry.name .. ": " .. entry.dir,
+            ordinal = entry.name,
+          }
+        end,
+      }),
+      sorter = conf.generic_sorter(opts),
+      attach_mappings = function(bufnr)
+        actions.select_default:replace(function()
+          actions.close(bufnr)
+          local selection = action_state.get_selected_entry()
+          callback(selection.value.dir)
+        end)
+        return true
+      end,
+    })
+    :find()
+end
 
-vim.print(config)
+M.current_tab = function(opts)
+  opts = opts or {}
+  get_target(opts, function(target)
+    vim.cmd("tcd " .. target)
+  end)
+end
+
+M.new_tab = function(opts)
+  opts = opts or {}
+  get_target(opts, function(target)
+    vim.cmd("tabnew " .. target)
+    vim.cmd("tcd " .. target)
+  end)
+end
+
+M.globally = function(opts)
+  opts = opts or {}
+  get_target(opts, function(target)
+    vim.cmd("cd " .. target)
+  end)
+end
 
 return M
