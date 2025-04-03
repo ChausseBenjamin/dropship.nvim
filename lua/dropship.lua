@@ -27,6 +27,13 @@ end
 
 local function get_target(opts, callback)
   opts = opts or {}
+
+  -- Calculate the maximum length from all entry names
+  local max_name_length = 0
+  for _, entry in ipairs(opts.drop_locations or M.drop_locations) do
+    max_name_length = math.max(max_name_length, #(entry.name or "Unknown"))
+  end
+
   pickers
     .new(opts, {
       prompt_title = opts.prompt_title or "Drop into which project?",
@@ -34,10 +41,14 @@ local function get_target(opts, callback)
       finder = finders.new_table({
         results = opts.drop_locations or M.drop_locations,
         entry_maker = function(entry)
+          local name = entry.name or "Unknown"
+          local dir = entry.dir or "Unknown"
+          local padded_name = name .. ":" .. string.rep(" ", max_name_length - #name + 1)
+          local display = padded_name .. dir
           return {
             value = entry,
-            display = (entry.name or "Unknown") .. ": " .. (entry.dir or "Unknown"),
-            ordinal = entry.name or ".",
+            display = display,
+            ordinal = display,
           }
         end,
       }),
