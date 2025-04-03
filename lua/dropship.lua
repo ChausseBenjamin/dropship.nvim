@@ -6,9 +6,6 @@ local conf = require("telescope.config").values
 local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
 
-M.drop_locations = {}
-M.use_exp = false
-
 M.setup = function(opts)
   opts = opts or {}
   if type(opts.drop_locations) == "table" then
@@ -32,13 +29,15 @@ local function get_target(opts, callback)
   opts = opts or {}
   pickers
     .new(opts, {
+      prompt_title = opts.prompt_title or "Drop into which project?",
+      prompt_prefix = opts.prompt_icon or " ", -- Added prompt_icon option
       finder = finders.new_table({
-        results = M.drop_locations,
+        results = opts.drop_locations or M.drop_locations,
         entry_maker = function(entry)
           return {
             value = entry,
-            display = entry.name .. ": " .. entry.dir,
-            ordinal = entry.name,
+            display = (entry.name or "Unknown") .. ": " .. (entry.dir or "Unknown"),
+            ordinal = entry.name or ".",
           }
         end,
       }),
